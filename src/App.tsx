@@ -16,17 +16,18 @@ import {
   FaFacebook,
 } from 'react-icons/fa'
 import TaskList from './components/Task/List'
-import { store } from './app/store'
+import { RootState, store } from './app/store'
+import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 function App() {
+  const { tasks } = useSelector((state: RootState) => state.tasksWatch)
+  const { tab } = useSelector((state: RootState) => state.tabWatch)
   const { colorMode, toggleColorMode } = useColorMode()
-  store.subscribe(() => {
-    localStorage.setItem(
-      'tasks',
-      JSON.stringify(store.getState().tasksWatch.tasks)
-    )
-    localStorage.setItem('tab', store.getState().tabWatch.tab)
-  })
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+    localStorage.setItem('tab', tab)
+  }, [tasks, tab])
 
   return (
     <VStack p={4} minH="100vh" pb={28}>
